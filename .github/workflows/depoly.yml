@@ -1,0 +1,41 @@
+name: Deploy to Ubuntu Server
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build and push Docker image
+      env:
+        DOCKER_IMAGE: message-fastapi
+      run: |
+        docker build -t $DOCKER_IMAGE:${{ github.sha }} .
+        docker save $DOCKER_IMAGE:${{ github.sha }} > image.tar
+
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+    
+    - name: Deploy to Server
+      env:
+        DOCKER_IMAGE: message-fastapi
+      run: |
+        scp image.tar ubuntu@35.77.223.154:/home/ubuntu/
+        ssh ubuntu@35.77.223.154 << EOF
+          cd /home/ubuntu
+          docker load < image.tar
+          docker stop message-fastapi || true
+          docker rm message-fastapi || true
+          docker run -d --name message-fastapi -p 8000:8000 $DOCKER_IMAGE:${{ github.sha }}
+          sudo systemctl restart message
+        EOF
