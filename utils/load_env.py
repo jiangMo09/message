@@ -3,7 +3,6 @@ import os
 
 load_dotenv()
 
-MY_IPS = os.getenv("MY_IPS")
 HOST = os.getenv("DB_HOST")
 USER = os.getenv("DB_USER")
 PASSWORD = os.getenv("DB_PASSWORD")
