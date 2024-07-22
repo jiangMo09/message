@@ -10,13 +10,7 @@
     <h1>{{ header_text }}</h1>
     <div class="post-form">
       <h2>發表新留言</h2>
-      <form
-        id="postForm"
-        action="/post"
-        method="post"
-        enctype="multipart/form-data"
-        onsubmit="return validateForm()"
-      >
+      <form id="postForm" enctype="multipart/form-data">
         <textarea
           name="message"
           rows="4"
@@ -44,5 +38,5 @@
       {% endfor %}
     </div>
   </body>
-  <script src="/static/script.js"></script>
+  <script type="module" src="/static/script.js"></script>
 </html>

@@ -1,12 +1,17 @@
+import { fetchData } from "/static/fetchData.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("postForm");
   const submitButton = form.querySelector('input[type="submit"]');
+  const postList = document.querySelector(".post-list");
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      submitForm();
+    if (!validateForm()) {
+      return;
     }
+
+    await submitForm();
   });
 
   const validateForm = () => {
@@ -27,36 +32,36 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     const formData = new FormData(form);
 
-    // 禁用提交按鈕並改變文字
     submitButton.disabled = true;
     submitButton.value = "提交中...";
 
-    fetch("/post", {
-      method: "POST",
-      body: formData
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          // 清空表單
-          form.reset();
-          // 顯示成功消息
-          alert("留言發送成功！");
-        } else {
-          alert("發送留言失敗：" + data.detail);
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("發送留言時出錯");
-      })
-      .finally(() => {
-        // 重新啟用提交按鈕並恢復文字
-        submitButton.disabled = false;
-        submitButton.value = "發送留言";
+    try {
+      const response = await fetch("/post", {
+        method: "POST",
+        body: formData // 直接發送 FormData，不要進行任何轉換
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData));
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert("發送留言失敗：" + data.detail);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("發送留言時出錯: " + error.message);
+    } finally {
+      submitButton.disabled = false;
+      submitButton.value = "發送留言";
+    }
   };
 });
