@@ -1,31 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
     <title>留言板</title>
-    <script src="/static/js/script.js" defer></script>
-</head>
-<body>
+  </head>
+  <body>
     <h1>{{ header_text }}</h1>
     <div class="post-form">
-        <h2>發表新留言</h2>
-        <form action="/post" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-            <textarea name="message" rows="4" cols="50" placeholder="請輸入留言內容" required></textarea>
-            <input type="file" name="image" id="imageInput" accept="image/*" required>
-            <input type="submit" value="發送留言">
-        </form>
-    </div>Ｆ
-    <div class="post-list">
-        <h2>留言列表</h2>
-        {% for post in posts %}
-        <div class="post">
-            <p>{{ post.message }}</p>
-            <img src="{{ post.image_path }}" alt="留言圖片">
-            
-        </div>
-        {% endfor %}
+      <h2>發表新留言</h2>
+      <form
+        id="postForm"
+        action="/post"
+        method="post"
+        enctype="multipart/form-data"
+        onsubmit="return validateForm()"
+      >
+        <textarea
+          name="message"
+          rows="4"
+          cols="50"
+          placeholder="請輸入留言內容"
+          required
+        ></textarea>
+        <input
+          type="file"
+          name="image"
+          id="imageInput"
+          accept="image/*"
+          required
+        />
+        <input type="submit" value="發送留言" />
+      </form>
     </div>
-</body>
+    <div class="post-list">
+      <h2>留言列表</h2>
+      {% for post in posts %}
+      <div class="post">
+        <p>{{ post.message }}</p>
+        <img src="{{ post.image_path }}" alt="留言圖片" />
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+  <script src="/static/script.js"></script>
 </html>
