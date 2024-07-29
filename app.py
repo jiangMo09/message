@@ -81,6 +81,6 @@ async def create_post(message: str = Form(...), image: UploadFile = File(...)):
         connection.close()
 
 
-@app.get("/loaderio-dd2c4743eaa719c6810019d76f9a84fb")
+@app.get("/loaderio-160b2dd52831095f03952ae5e53c9d55")
 def verify():
-    return "loaderio-dd2c4743eaa719c6810019d76f9a84fb"
+    return "loaderio-160b2dd52831095f03952ae5e53c9d55"
