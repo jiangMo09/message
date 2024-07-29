@@ -79,3 +79,8 @@ async def create_post(message: str = Form(...), image: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"數據庫錯誤: {str(e)}")
     finally:
         connection.close()
+
+
+@app.get("/loaderio-dd2c4743eaa719c6810019d76f9a84fb")
+def verify():
+    return "loaderio-dd2c4743eaa719c6810019d76f9a84fb"
