@@ -3,7 +3,7 @@ import boto3
 from botocore.exceptions import ClientError
 import uuid
 from fastapi import FastAPI, Request, Form, File, UploadFile, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
@@ -81,6 +81,6 @@ async def create_post(message: str = Form(...), image: UploadFile = File(...)):
         connection.close()
 
 
-@app.get("/loaderio-160b2dd52831095f03952ae5e53c9d55")
+@app.get("/loaderio-160b2dd52831095f03952ae5e53c9d55", response_class=PlainTextResponse)
 def verify():
     return "loaderio-160b2dd52831095f03952ae5e53c9d55"
